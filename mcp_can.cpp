@@ -45,8 +45,17 @@
 */
 #include "mcp_can.h"
 
-#define spi_readwrite SPI.transfer
+#define spi_readwrite mcp_can_spi_transfer
 #define spi_read() spi_readwrite(0x00)
+
+
+byte mcp_can_spi_transfer(byte out){
+	byte in;
+	SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
+	in = SPI.transfer(out);
+	SPI.endTransaction();
+	return in;
+}
 
 /*********************************************************************************************************
 ** Function name:           mcp2515_reset
